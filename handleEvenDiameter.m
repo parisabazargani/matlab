@@ -1,0 +1,41 @@
+function cube = handleEvenDiameter(cube,diameter,whiteDiameter)
+if(whiteDiameter==0)
+    return;
+end
+mainIndex = (diameter - whiteDiameter);
+import java.util.LinkedList
+
+mainQueue = [];
+whiteMatterIndices = convertIndexToId(mainIndex,mainIndex,mainIndex,diameter);
+for i=0:1
+    for j=0:1
+        for k=0:1
+            mainQueue.add(convertIndexToId(mainIndex+i,mainIndex+j,mainIndex+k,diameter));            
+        end
+    end
+end
+counter  = 1;
+counter2 = 1;
+while(counter<whiteDiameter-2)
+    tempQueue = mainQueue.clone();
+    while(~tempQueue.isEmpty())
+        nodeId = tempQueue.poll();
+        whiteMatterIndices(counter2) = nodeId;
+        counter2 =counter2+1;
+        n = cube(nodeId).neighbors;
+        for i=1:size(n,2)
+            if(~mainQueue.contains(n(i)))
+                mainQueue.add(n(i));       
+            end
+        end
+    end
+    counter = counter + 1
+end
+while(~mainQueue.isEmpty())
+    nodeId = mainQueue.poll();
+    whiteMatterIndices(size(whiteMatterIndices,2)+1) = nodeId;
+end
+for i=1:size(whiteMatterIndices,2)
+    cube(whiteMatterIndices(i)).isWhite = true;
+end
+end
